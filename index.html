@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clario — Capture with clarity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#"><span class="brand-mark">C</span><span>clario</span></a>
+      <nav>
+        <a class="nav-item active" href="#editor"><span>⌁</span> Capture studio</a>
+        <a class="nav-item" href="#recent"><span>◫</span> Recent captures</a>
+        <a class="nav-item" href="#library"><span>⌘</span> Brand library</a>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="plan-card"><span class="plan-dot"></span><div><strong>Creator workspace</strong><small>12 of 50 captures used</small></div><button aria-label="More plan options">•••</button></div>
+      <div class="profile"><div class="avatar">PG</div><div><strong>Praveen G.</strong><small>Workspace owner</small></div><span>⌄</span></div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div class="crumb"><span>Capture studio</span><i>/</i><strong id="documentName">Untitled capture</strong><button id="renameBtn" aria-label="Rename capture">✎</button></div>
+        <div class="top-actions"><button class="icon-button" id="undoBtn" title="Undo">↶</button><button class="icon-button" id="redoBtn" title="Redo">↷</button><span class="divider"></span><button class="share-button" id="shareBtn"><span>↗</span> Share</button><button class="export-button" id="downloadBtn">Export <span>⌄</span></button></div>
+      </header>
+
+      <section class="workspace">
+        <div class="studio-head"><div><p class="eyebrow">VISUAL COMMUNICATION, ELEVATED</p><h1>Make every detail <em>impossible to miss.</em></h1><p class="subtitle">Capture, mark up, and share beautiful context in seconds.</p></div><div class="autosave"><span></span> All changes saved</div></div>
+
+        <div class="editor-grid">
+          <section class="editor-panel" id="editor">
+            <div class="capture-bar">
+              <button class="capture-main" id="screenCapture"><span class="capture-icon">◎</span> New capture <kbd>⌘ K</kbd></button>
+              <span class="bar-label">or</span>
+              <button class="import-button" id="uploadBtn">Upload image</button><input type="file" id="fileInput" accept="image/*" hidden>
+              <span class="paste-hint">Paste from clipboard <kbd>⌘ V</kbd></span>
+            </div>
+            <div class="canvas-area" id="canvasArea">
+              <div class="canvas-toolbar" aria-label="Annotation tools">
+                <button class="tool active" data-tool="select" title="Select (V)">↖</button><button class="tool" data-tool="highlight" title="Highlight (H)"><span class="highlight-icon">╱</span></button><button class="tool" data-tool="draw" title="Draw (D)">〰</button><button class="tool" data-tool="arrow" title="Arrow (A)">↗</button><button class="tool" data-tool="text" title="Text (T)">T</button><button class="tool" data-tool="crop" title="Crop (C)">⌑</button><span class="tool-sep"></span><button class="tool" id="deleteBtn" title="Delete selected">⌫</button>
+              </div>
+              <div class="canvas-wrap" id="canvasWrap"><canvas id="editorCanvas" width="1280" height="720"></canvas><div class="empty-state" id="emptyState"><div class="empty-icon">⌗</div><h3>Your canvas is ready</h3><p>Capture your screen, upload an image, or paste<br>anything from your clipboard.</p><button id="emptyCapture">Start a capture <span>→</span></button></div></div>
+              <div class="zoom-bar"><button id="zoomOut">−</button><span id="zoomValue">100%</span><button id="zoomIn">+</button><span class="zoom-sep"></span><button id="fitBtn">Fit to screen</button></div>
+            </div>
+          </section>
+
+          <aside class="inspector">
+            <div class="inspector-heading"><h2>Properties</h2><button>•••</button></div>
+            <div class="no-selection" id="noSelection"><div class="sparkle">✦</div><h3>Ready when you are</h3><p>Select a tool to start adding<br>clarity to your capture.</p></div>
+            <div id="properties" hidden>
+              <section class="property-section"><label>COLOR</label><div class="swatches"><button class="swatch lime selected" data-color="#D7FF4A"></button><button class="swatch coral" data-color="#FF8B76"></button><button class="swatch purple" data-color="#A78BFA"></button><button class="swatch blue" data-color="#73B7FF"></button><button class="swatch white" data-color="#FFFFFF"></button><input id="colorPicker" type="color" value="#D7FF4A" title="Custom color"></div></section>
+              <section class="property-section"><label>OPACITY <output id="opacityOutput">45%</output></label><input id="opacityRange" type="range" min="10" max="100" value="45"></section>
+              <section class="property-section"><label>STROKE WEIGHT <output id="weightOutput">6 px</output></label><div class="weight-options"><button data-weight="3">Thin</button><button class="selected" data-weight="6">Medium</button><button data-weight="10">Bold</button></div></section>
+              <section class="property-section crop-actions" id="cropActions" hidden><label>CROP SELECTION</label><button id="applyCrop">Apply crop</button><button id="cancelCrop">Cancel</button></section>
+            </div>
+            <div class="tip-card"><span>✦</span><p><b>Pro tip</b><br>Use <kbd>H</kbd> to switch to the highlighter anytime.</p></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
