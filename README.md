@@ -30,8 +30,10 @@ turning payer workflows, clinical knowledge and messy business requirements into
 | Project | What it is | Status |
 |---|---|---|
 | **[AITrainerHub](https://www.aitrainerhub.in)** | Every AI-trainer job in one hub — aggregates openings from 20+ platforms into one searchable feed, with match-finding and referral tracking | 🟢 Live |
-| **OMNIO** | Full website ecosystem for a homeopathic clinic — condition pages, patient education, blog, booking and MCP agent integrations | 🟢 Live |
+| **[OMNIO](https://www.omnio.in)** | Full website ecosystem for a homeopathic clinic — condition pages, patient education, blog, booking and MCP agent integrations | 🟢 Live |
 | **Prior Authorization Command Center** | Production-grade payer prior-auth (CMS-0057-F) solution on Pega Infinity with GenAI & MCP | 🛠️ In progress |
+
+<sub>AITrainerHub and OMNIO are live products — visit them via the links above.</sub>
 
 ### 🩺 Health & wellbeing
 
@@ -41,6 +43,8 @@ turning payer workflows, clinical knowledge and messy business requirements into
 | **BreatheEasy** | Asthma & COPD self-management companion |
 | **MoodRx** | Daily emotional-wellness check-ins, journaling and personalised nudges |
 | **SmartPlate.AI** | AI food companion — healthy recipes from cravings, food captions and zero-waste leftover meals |
+
+<sub>⚕️ Health projects are demos for education only — not medical devices or medical advice.</sub>
 
 ### 🎓 Learning & careers
 
