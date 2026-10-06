@@ -25,13 +25,41 @@ turning payer workflows, clinical knowledge and messy business requirements into
 
 ## 🚀 What I'm building
 
+### ⭐ Flagship
+
 | Project | What it is | Status |
 |---|---|---|
-| **[AITrainerHub](https://www.aitrainerhub.in)** | A one-stop hub for freelance AI trainer jobs worldwide | 🟢 Live |
+| **[AITrainerHub](https://www.aitrainerhub.in)** | Every AI-trainer job in one hub — aggregates openings from 20+ platforms into one searchable feed, with match-finding and referral tracking | 🟢 Live |
+| **OMNIO** | Full website ecosystem for a homeopathic clinic — condition pages, patient education, blog, booking and MCP agent integrations | 🟢 Live |
 | **Prior Authorization Command Center** | Production-grade payer prior-auth (CMS-0057-F) solution on Pega Infinity with GenAI & MCP | 🛠️ In progress |
-| **AI Learning Tools** | Self-contained, interactive study apps — flashcards, quiz engines, domain filters (e.g. PMI Business Analysis) | 🟢 Active |
 
-> 💡 More apps are being published here — ⭐ star or 👀 watch to follow along.
+### 🩺 Health & wellbeing
+
+| Project | What it is |
+|---|---|
+| **RespireAI** | AI respiratory-sound analyzer concept for screening asthma, bronchitis and pneumonia patterns |
+| **BreatheEasy** | Asthma & COPD self-management companion |
+| **MoodRx** | Daily emotional-wellness check-ins, journaling and personalised nudges |
+| **SmartPlate.AI** | AI food companion — healthy recipes from cravings, food captions and zero-waste leftover meals |
+
+### 🎓 Learning & careers
+
+| Project | What it is |
+|---|---|
+| **PM Dojo** | Practice product management through interactive decision-making simulations |
+| **AI Learning Tools** | Self-contained study apps — flashcards, quiz engines and domain filters (e.g. PMI Business Analysis) |
+
+### 🛠️ Creator & productivity tools
+
+| Project | What it is |
+|---|---|
+| **Print Niche Studio** | Generate print-ready planners, trackers and wall art for Etsy sellers — exports to PDF/PNG |
+| **Numify** | Global calculator suite — unit & live currency conversion, world clock, fully keyboard-accessible |
+| **Clip Smith AI** | AI video editor & scene generator |
+| **Mind Twin AI** | A "cognitive twin" that learns your decision style and communication patterns |
+| **Formly** | Conversational form builder in Hindi, English and 5+ Indian languages |
+
+> 💡 Source code for these apps is being published here — ⭐ star or 👀 watch to follow along.
 
 ## 🧰 Toolbox
 
