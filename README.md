@@ -63,6 +63,21 @@ turning payer workflows, clinical knowledge and messy business requirements into
 | **Mind Twin AI** | A "cognitive twin" that learns your decision style and communication patterns |
 | **Formly** | Conversational form builder in Hindi, English and 5+ Indian languages |
 
+### 📊 Business analytics (BITSoM capstone)
+
+| Project | What it is |
+|---|---|
+| **[Retail Data Cleaning](https://github.com/DrPraveen-BA/vspraveenganapathiraju_1234_part1_data_cleaning)** | Messy multi-system order export → audited, analysis-ready dataset (Python, pandas) |
+| **[Onboarding A/B Test](https://github.com/DrPraveen-BA/vspraveenganapathiraju_1234_part2_kpi_experiment)** | KPI, guardrail and segment analysis — conversion +120%, launch-with-caution call |
+| **[Store Sales Drivers](https://github.com/DrPraveen-BA/vspraveenganapathiraju_1234_part3_regression_insights)** | Regression on 320 store-months (R² 0.86) — footfall & marketing win, discounts don't |
+| **[Sales Dashboard](https://github.com/DrPraveen-BA/vspraveenganapathiraju_1234_part4_tableau_dashboard)** | Interactive Tableau executive dashboard for sales, margin and returns |
+
+### 🧩 Small tools
+
+| Project | What it is |
+|---|---|
+| **[Daily Tasks](https://github.com/DrPraveen-BA/-daily-tasks-landing)** | Zero-dependency daily task dashboard in a single HTML file |
+
 > 💡 Source code for these apps is being published here — ⭐ star or 👀 watch to follow along.
 
 ## 🧰 Toolbox
