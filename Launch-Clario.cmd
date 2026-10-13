@@ -3,6 +3,8 @@ setlocal DisableDelayedExpansion
 if not exist "%~dp0index.html" goto missing
 if not exist "%~dp0app.js" goto missing
 if not exist "%~dp0styles.css" goto missing
+if not exist "%~dp0editor-core.js" goto missing
+if not exist "%~dp0media.js" goto missing
 set "CLARIO_URL=file:///%~dp0index.html"
 set "CLARIO_URL=%CLARIO_URL:\=/%"
 set "CLARIO_BROWSER="

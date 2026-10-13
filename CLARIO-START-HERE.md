@@ -1,26 +1,36 @@
-# Clario for Windows
+# Clario Studio — start here
 
-1. Extract the entire downloaded ZIP. Move the extracted folder to a permanent location.
-2. Double-click **Launch-Clario.cmd**. Clario opens in its own Edge or Chrome app window; if neither is installed, your default browser opens.
-3. For a desktop icon, double-click **Install-Clario-Shortcut.cmd** once. Then double-click **Clario** on the desktop whenever you need it.
+Download the ZIP from the codex/clario-windows-launcher branch and extract the ENTIRE folder to a permanent location, such as Documents/Clario. Double-click Launch-Clario.cmd. Optional: run Install-Clario-Shortcut.cmd once for a desktop shortcut. Do not run from inside the ZIP preview. Keep the folder in place after installing a shortcut.
 
-No Node.js, Python, administrator privileges, account, or server setup is required. This is a browser-powered Windows launcher, not a native Snipping Tool replacement or an EXE installer. Normal launch uses a Windows batch file directly and does not require PowerShell. PowerShell is used only for the optional desktop shortcut; managed computers may block scripts.
+Clario runs locally in Edge or Chrome. Normal launch uses a batch file, with no PowerShell, Node.js, Python, account, server, or administrator privileges required. Optional shortcut creation uses Windows PowerShell. On a managed computer, policies can block launch scripts. Open index.html directly in Edge or Chrome if needed. Do not disable organizational security policies.
 
-## Capture and edit
-Click **New capture** and select a screen, window, or tab in the browser's sharing dialog. Permission is required for every capture. Browser support or company policy may prevent capture; use **Win+Shift+S** and paste into Clario, or upload an image instead.
-Add arrows, highlights, freehand marks, or text; drag a crop and click **Apply crop**; export a PNG before closing. Undo works with **Ctrl+Z**.
+## Capture → clarify → save
 
-You can pin the desktop shortcut to Start through Windows. There is no global capture hotkey or background tray process.
-Keep the extracted folder in place: moving/deleting it breaks the shortcut. Rerun setup after moving it. To remove the shortcut, delete the Clario desktop icon. No registry or system settings are changed.
+1. Click Capture screenshot, choose a screen, window, or browser tab in the browser's permission dialog. The browser determines available sources. Use Region to capture first, then drag the part to keep and Apply crop. Optional delay starts after permission. Alternatively paste with Ctrl+V, drag an image into the workspace, or Open image / project. Try a sample capture for a guided first test.
+2. Highlight text visually; draw rectangles/ellipses (border-only or filled), arrows, lines, or pen strokes; add text and numbered steps. Select to move or resize using the lower-right handle. Eraser removes annotations, not the underlying screenshot. Delete, duplicate, reorder, or edit selected text. Escape unselects. Undo and redo work across crop and image transformations.
+3. Export PNG, JPG, or WebP; Copy image where clipboard access is permitted. Save an editable .clario.json project to retain annotations. Browser-local projects keep the last eight documents where IndexedDB is available; storage can be cleared or denied by browser settings. Export a file for a dependable backup.
 
-Images remain in the current browser session; they are not uploaded by this launcher. Share copies a URL, not the image; share the exported PNG. Redo and persistent autosave are not implemented.
-Internet access is only used for optional web fonts.
+Text highlighting is manual visual markup, not OCR text recognition. Redact paints opaque black over a region in exported images. Blur is only a visual effect; it is not secure redaction. Editable project files and local projects retain the original image, even under redaction.
 
-## Validation
-The existing nine editor regression tests pass, including crop undo geometry and vertical arrow completion. JavaScript syntax is checked. Windows launch, PowerShell execution, shortcut creation, and capture permissions require a Windows device and have not been executed in the Linux build environment.
+Crop, rotate, resize, and image-border operations flatten annotations into the resulting image. Undo restores the previous editable state. The editor keeps up to 30 history entries with an approximately 32 MB serialized history budget; very large captures may have fewer undo steps.
 
-## If the app does not open
-Download the updated launcher branch ZIP, extract it completely into a permanent folder (for example Documents/Clario), and run Launch-Clario.cmd outside the ZIP preview.
-If scripts are blocked, right-click index.html and choose Open with Microsoft Edge or Google Chrome. Do not disable organizational security policies.
-If Clario opens a blank app window, open index.html directly in the browser; a folder name containing URL-special characters such as # can affect the app-mode file URL. Use a plain folder name.
-The launcher checks that index.html, app.js, and styles.css are present, falls back to the default browser if an executable cannot be started, and pauses with a readable error when Windows reports a launch failure.
+## Video snippets
+
+Click Record video, choose a source, then Stop & preview. Optional screen audio depends on the selected source, OS, and browser. Microphone access needs separate permission. If both sources supply audio, they are mixed. Pause/resume and browser Stop sharing finalize safely. Recordings stop after five wall-clock minutes or approximately 100 MB of buffered data. Preview and download before closing. Capture current frame sends a video frame to the image editor.
+
+Downloads use the browser-supported WebM or MP4 recording format. GIF conversion, trimming, video region overlays, captions, and webcam overlays are not part of this edition.
+
+## Shortcuts
+
+Ctrl+Z undo; Ctrl+Y / Ctrl+Shift+Z redo; Ctrl+S save project; Ctrl+D duplicate; Delete remove selection; Esc unselect. V select, H highlight, R rectangle, O ellipse, A arrow, L line, D pen, T text, N step, E eraser, C crop. These shortcuts work only when Clario is focused and not while typing in a field.
+
+## Limits and troubleshooting
+
+- Recommended: current desktop Chrome or Edge. Screen capture and clipboard depend on browser permissions and secure contexts; if unavailable locally, use Win+Shift+S and paste or import a saved image.
+- Maximum imported file: 32 MB; image: 8192 pixels per side and 32 megapixels. Maximum imported annotations: 2000. Large files can exhaust memory; use a smaller capture when needed.
+- If launching fails, ensure all files were extracted; use the visible error. Browser app-mode launch and desktop shortcut behavior still need Windows-device testing.
+- If the app window is blank, open index.html directly. Prefer plain folder names without URL-special characters such as #.
+- Remove the optional desktop shortcut by deleting Clario.lnk. Moving the app folder requires recreating the shortcut. No registry settings are changed.
+- Images and projects remain on the device. No cloud upload, public link, payment flow, telemetry, or account service is included.
+
+This is a browser-first development build. See PRODUCT-READINESS.md for the peer feature audit and remaining work before a paid launch.

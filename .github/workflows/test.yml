@@ -1,12 +1,9 @@
 name: Check Clario editor
-
 on:
   pull_request:
   push:
-
 permissions:
   contents: read
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -16,5 +13,7 @@ jobs:
         with:
           node-version: '22'
       - run: node --check app.js
-      - run: node --test tests/editor.test.cjs
+      - run: node --check editor-core.js
+      - run: node --check media.js
+      - run: node --test tests/*.test.cjs
       - run: git diff --check
