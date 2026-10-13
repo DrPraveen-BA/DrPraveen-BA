@@ -18,24 +18,9 @@ try {
         Write-Host 'Clario desktop shortcut created. Keep this extracted folder in place.'
         exit 0
     }
-    $url = ([System.Uri]::new($index)).AbsoluteUri
-    $candidates = @()
-    foreach ($base in @([Environment]::GetEnvironmentVariable('ProgramFiles(x86)'), $env:ProgramFiles, $env:LOCALAPPDATA)) {
-        if ($base) {
-            $candidates += Join-Path $base 'Microsoft\Edge\Application\msedge.exe'
-        }
-    }
-    foreach ($base in @($env:ProgramFiles, [Environment]::GetEnvironmentVariable('ProgramFiles(x86)'), $env:LOCALAPPDATA)) {
-        if ($base) {
-            $candidates += Join-Path $base 'Google\Chrome\Application\chrome.exe'
-        }
-    }
-    $browser = $candidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
-    if ($browser) {
-        Start-Process -FilePath $browser -ArgumentList @("--app=$url")
-    } else {
-        Start-Process -FilePath $index
-    }
+    # Compatibility entry point: normal launch does not require PowerShell.
+    & (Join-Path $root 'Launch-Clario.cmd')
+    exit $LASTEXITCODE
 } catch {
     Write-Host ("Unable to launch Clario: " + $_.Exception.Message)
     exit 1
