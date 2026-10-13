@@ -44,3 +44,5 @@ The desktop beta includes a tray launcher and Ctrl+Shift+2/3/4 for rectangular r
 OCR is local and English-only in prepared builds. Automated redaction is a candidate finder that can miss information; review it manually. Browser edition OCR requires locally prepared vendor assets and worker permission; prefer the desktop beta. The browser extension in extension/ captures full website pages for import into Clario; it is a developer-mode extension, not a published store listing.
 
 Server sharing, payment checkout, license activation in commercial builds, and update feeds need seller/service configuration. The beta has no seller signing key or merchant connection. See FEATURE-AUDIT.md and server/README.md for exact implemented, tested, configured, and missing states. For keyboard selection, press ] / [ to cycle marks and arrow keys to move them; Shift+arrow moves ten pixels.
+
+In the desktop edition, closing the main window stops an active recording and keeps the app in the tray. Open it again to export the preview. Quit uses an unsaved-work confirmation. This behavior still needs end-user Windows UAT.

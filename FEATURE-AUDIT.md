@@ -66,8 +66,8 @@ Audit date: 13 October 2026. Status terms: **tested** means named automated evid
 
 | Requirement | Status | Evidence / boundary |
 |---|---|---|
-| Windows app package / installer | Windows CI configured | Linux unpacked build succeeded; local NSIS failed without Wine; check CI artifact results |
-| Native startup/OCR/converter smoke test | Windows CI configured | Runs packaged application and checks loaded modules, OCR, converter |
+| Windows app package / installer | Windows CI passed | Windows installer built; packaged startup/OCR/converter smoke passed; unsigned beta only |
+| Native startup/OCR/converter smoke test | Windows CI passed | Packaged application loaded editor/bridge modules, recognized OCR sample, and ran converter |
 | Windows code signing / SmartScreen reputation | Gap / seller provisioning | Unsigned evaluation artifacts; certificate/reputation not created |
 | Signed update manifest / verified download | Signature tests + source/configured | Pinned public key, HTTPS, expiry/hash checks; user download approval; no live feed |
 | Signed offline Pro license | Signature tests + source/configured | Ed25519 and expiry; public key causes advanced native features to require valid license |
@@ -88,7 +88,7 @@ Audit date: 13 October 2026. Status terms: **tested** means named automated evid
 
 Real integration smoke: local English OCR recognized CLARIO 12345; FFmpeg generated a source clip and trimmed/transcoded valid MP4 and GIF. Existing native canvas pixel QA passes for opaque redaction, clean export, vertical arrows, crop undo dimensions/content. JavaScript syntax checks cover all app, desktop, extension, server, and test files. npm audit --omit=dev reports zero known production vulnerabilities at audit time. Updating electron-builder to 26.15.3 removed the observed high/critical build-tool findings; full npm audit still reports eight moderate development-tool findings rooted in sprintf-js 1.1.3. The registry currently reports that same vulnerable version as its latest stable release. This is an unresolved build-tool review item, not a claim of a clean full dependency tree.
 
-Windows CI artifacts and actual device behavior must be reviewed separately. The physical display/overlay/window chooser, microphone/webcam, extension permissions, persistent storage, desktop shortcuts, installer/uninstaller, encrypted credential storage, and update/service provisioning have not passed end-user UAT here.
+Windows CI completed successfully and produced an unsigned beta installer. Actual device behavior must be reviewed separately. The physical display/overlay/window chooser, microphone/webcam, extension permissions, persistent storage, desktop shortcuts, installer/uninstaller, encrypted credential storage, and update/service provisioning have not passed end-user UAT here.
 
 ## Release blockers in order
 
