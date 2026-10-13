@@ -12,8 +12,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --check app.js
-      - run: node --check editor-core.js
-      - run: node --check media.js
+      - run: node scripts/check-syntax.cjs
       - run: node --test tests/*.test.cjs
       - run: git diff --check

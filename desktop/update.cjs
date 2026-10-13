@@ -1,0 +1,4 @@
+'use strict';
+const crypto=require('node:crypto');
+function verifyUpdate(envelope,publicKey,currentVersion,now=Date.now()){if(!envelope||typeof envelope.payload!=='string'||typeof envelope.signature!=='string'||envelope.payload.length>16384||!crypto.verify(null,Buffer.from(envelope.payload),publicKey,Buffer.from(envelope.signature,'base64url')))throw Error('Update signature is invalid');const p=JSON.parse(envelope.payload);if(p.product!=='clario-studio-update'||!/^\d+\.\d+\.\d+$/.test(p.version||'')||!/^https:\/\//.test(p.url||'')||!/^([a-f0-9]{64})$/.test(p.sha256||'')||!Number.isFinite(p.expires)||p.expires<=now)throw Error('Update manifest is invalid or expired');const next=p.version.split('.').map(Number),current=currentVersion.split('.').map(Number);const newer=next.some((v,i)=>v>current[i]&&next.slice(0,i).every((x,j)=>x===current[j]));return{...p,newer};}
+module.exports={verifyUpdate};

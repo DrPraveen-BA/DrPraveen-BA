@@ -1,0 +1,2 @@
+const {readdirSync}=require('node:fs'),path=require('node:path'),{spawnSync}=require('node:child_process');
+function walk(dir){for(const e of readdirSync(dir,{withFileTypes:true})){if(['node_modules','release','vendor','.git'].includes(e.name))continue;const p=path.join(dir,e.name);if(e.isDirectory())walk(p);else if(/\.(cjs|js)$/.test(p)){const r=spawnSync(process.execPath,['--check',p],{encoding:'utf8'});if(r.status!==0){process.stderr.write(r.stderr);process.exitCode=1;}}}}walk(path.resolve(__dirname,'..'));

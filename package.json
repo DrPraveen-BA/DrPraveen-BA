@@ -1,0 +1,66 @@
+{
+  "name": "clario-studio",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Local-first screenshot, annotation and video studio",
+  "author": "Dr. GVS Praveen",
+  "main": "desktop/main.cjs",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "prepare-assets": "node scripts/prepare-assets.cjs",
+    "dist:win": "npm run prepare-assets && electron-builder --win nsis --x64",
+    "dist:linux": "npm run prepare-assets && electron-builder --linux dir",
+    "server": "node server/share.cjs",
+    "check": "node scripts/check-syntax.cjs"
+  },
+  "dependencies": {
+    "ffmpeg-static": "5.2.0",
+    "sharp": "0.35.5",
+    "tesseract.js": "7.0.0"
+  },
+  "devDependencies": {
+    "electron": "44.7.0",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "in.clario.studio",
+    "productName": "Clario Studio",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "index.html",
+      "styles.css",
+      "app.js",
+      "editor-core.js",
+      "media.js",
+      "advanced.js",
+      "desktop/**",
+      "assets/**",
+      "vendor/**",
+      "legal/**",
+      "node_modules/**",
+      "package.json",
+      "advanced-core.js"
+    ],
+    "asarUnpack": [
+      "node_modules/**",
+      "vendor/**"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/clario.ico",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "Clario-Studio-${version}-Setup.${ext}"
+    }
+  }
+}

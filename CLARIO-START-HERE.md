@@ -34,3 +34,13 @@ Ctrl+Z undo; Ctrl+Y / Ctrl+Shift+Z redo; Ctrl+S save project; Ctrl+D duplicate; 
 - Images and projects remain on the device. No cloud upload, public link, payment flow, telemetry, or account service is included.
 
 This is a browser-first development build. See PRODUCT-READINESS.md for the peer feature audit and remaining work before a paid launch.
+
+## 0.3.0 desktop beta and advanced tools
+
+The portable launcher still opens the browser edition. It does not install Electron or native features. A separate Windows beta installer is built by the Build Clario Windows beta GitHub Actions workflow; inspect its status and download Clario-Windows-Beta from the corresponding run's artifacts when available. No signed/public final release is published.
+
+The desktop beta includes a tray launcher and Ctrl+Shift+2/3/4 for rectangular region, screen, and freeform region. For native window screenshots select a window in the chooser. For recording choose a source first, then click Record video. More tools provides OCR, MP4/GIF conversion, stitching, presentation frames, batch conversion, optional share configuration, license activation, and update checking. Not all desktop behavior has passed Windows-device UAT.
+
+OCR is local and English-only in prepared builds. Automated redaction is a candidate finder that can miss information; review it manually. Browser edition OCR requires locally prepared vendor assets and worker permission; prefer the desktop beta. The browser extension in extension/ captures full website pages for import into Clario; it is a developer-mode extension, not a published store listing.
+
+Server sharing, payment checkout, license activation in commercial builds, and update feeds need seller/service configuration. The beta has no seller signing key or merchant connection. See FEATURE-AUDIT.md and server/README.md for exact implemented, tested, configured, and missing states. For keyboard selection, press ] / [ to cycle marks and arrow keys to move them; Shift+arrow moves ten pixels.
