@@ -27,8 +27,9 @@ jobs:
         run: |
           $process = Start-Process -FilePath 'release/win-unpacked/Clario Studio.exe' -ArgumentList '--clario-smoke-test' -PassThru
           if (-not $process.WaitForExit(90000)) { $process.Kill(); throw 'Packaged application startup timed out' }
-          if ($process.ExitCode -ne 0) { throw 'Packaged application startup failed' }
           $diagnostics = Join-Path $env:APPDATA 'Clario Studio/smoke-test.json'
+          if (Test-Path $diagnostics) { Get-Content $diagnostics | Write-Host }
+          if ($process.ExitCode -ne 0) { throw 'Packaged application startup failed' }
           $result = Get-Content $diagnostics | ConvertFrom-Json
           if (-not $result.core -or -not $result.advanced -or -not $result.bridge -or -not $result.ocr -or -not $result.converter) { throw 'Packaged modules are unavailable' }
       - uses: actions/upload-artifact@v4
