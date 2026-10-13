@@ -18,6 +18,9 @@ jobs:
       - run: git config --global url."https://github.com/".insteadOf ssh://git@github.com/
       - run: npm ci
       - run: npm test
+      - name: Signature gate regression checks (mock certificate responses)
+        shell: pwsh
+        run: ./tests/signature-gate.test.ps1
       - run: npm audit --omit=dev
       - run: npm run prepare-assets
       - run: node scripts/integration-smoke.cjs

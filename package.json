@@ -13,7 +13,9 @@
     "dist:win": "npm run prepare-assets && electron-builder --win nsis --x64 --publish never",
     "dist:linux": "npm run prepare-assets && electron-builder --linux dir --publish never",
     "server": "node server/share.cjs",
-    "check": "node scripts/check-syntax.cjs"
+    "check": "node scripts/check-syntax.cjs",
+    "dist:commercial": "npm run prepare-assets && node scripts/build-commercial.cjs direct",
+    "dist:store": "npm run prepare-assets && node scripts/build-commercial.cjs store"
   },
   "dependencies": {
     "ffmpeg-static": "5.2.0",

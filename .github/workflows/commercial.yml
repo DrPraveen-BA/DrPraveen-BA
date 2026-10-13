@@ -1,0 +1,79 @@
+name: Prepare Clario commercial packages
+on:
+  workflow_dispatch:
+    inputs:
+      route:
+        description: Verified direct signing or Partner Center package
+        required: true
+        type: choice
+        options: [direct, store]
+permissions:
+  contents: read
+jobs:
+  direct:
+    if: inputs.route == 'direct'
+    # Dedicated trusted runner with the CA-issued certificate/token middleware.
+    # Never run untrusted pull-request code on this runner.
+    runs-on: [self-hosted, Windows, X64, clario-signing]
+    environment: commercial-signing
+    timeout-minutes: 30
+    env:
+      CLARIO_SIGNING_THUMBPRINT: ${{ vars.CLARIO_SIGNING_THUMBPRINT }}
+      CLARIO_PUBLISHER_NAME: ${{ vars.CLARIO_PUBLISHER_NAME }}
+      CLARIO_TIMESTAMP_URL: ${{ vars.CLARIO_TIMESTAMP_URL }}
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm audit --omit=dev
+      - run: npm run dist:commercial
+      - name: Verify publisher, trust chain, timestamps and all packaged PE files
+        shell: pwsh
+        env:
+          CLARIO_SIGNING_SUBJECT: ${{ vars.CLARIO_SIGNING_SUBJECT }}
+        run: |
+          $installers = @(Get-ChildItem release/direct/Clario-Studio-*-Setup.exe)
+          if ($installers.Count -ne 1) { throw 'Expected exactly one installer' }
+          $installer = $installers[0].FullName
+          ./scripts/verify-commercial.ps1 -Installer $installer -AppDirectory release/direct/win-unpacked -ExpectedThumbprint $env:CLARIO_SIGNING_THUMBPRINT -ExpectedSubject $env:CLARIO_SIGNING_SUBJECT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Clario-Verified-Direct-Candidate
+          path: |
+            release/direct/Clario-Studio-*-Setup.exe
+            release/direct/signature-report.json
+          if-no-files-found: error
+  store:
+    if: inputs.route == 'store'
+    runs-on: windows-latest
+    environment: commercial-store
+    timeout-minutes: 30
+    env:
+      CLARIO_STORE_IDENTITY_NAME: ${{ vars.CLARIO_STORE_IDENTITY_NAME }}
+      CLARIO_STORE_PUBLISHER: ${{ vars.CLARIO_STORE_PUBLISHER }}
+      CLARIO_PUBLISHER_NAME: ${{ vars.CLARIO_PUBLISHER_NAME }}
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: git config --global url."https://github.com/".insteadOf ssh://git@github.com/
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm audit --omit=dev
+      - run: npm run dist:store
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Clario-Store-Submission-Candidate
+          path: release/store/*.appx
+          if-no-files-found: error
+# Neither job creates a GitHub release, uploads to Partner Center, or publishes.
