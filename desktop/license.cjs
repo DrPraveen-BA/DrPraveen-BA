@@ -1,0 +1,4 @@
+const crypto=require('node:crypto');
+function issue(payload,privateKey){const body=Buffer.from(JSON.stringify(payload)).toString('base64url');return body+'.'+crypto.sign(null,Buffer.from(body),privateKey).toString('base64url');}
+function verify(token,publicKey,now=Date.now()){if(typeof token!=='string'||token.length>16384)throw Error('Invalid license');const [body,signature,...extra]=token.split('.');if(extra.length||!body||!signature||!crypto.verify(null,Buffer.from(body),publicKey,Buffer.from(signature,'base64url')))throw Error('License signature is invalid');const p=JSON.parse(Buffer.from(body,'base64url').toString());if(p.product!=='clario-studio'||p.plan!=='pro'||typeof p.id!=='string'||!Number.isFinite(p.expires)||p.expires<=now||!Number.isFinite(p.issued)||p.issued>now+300000)throw Error('License expired or unsupported');return p;}
+module.exports={issue,verify};

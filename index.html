@@ -1,70 +1,13 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clario — Capture with clarity</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <a class="brand" href="#"><span class="brand-mark">C</span><span>clario</span></a>
-      <nav>
-        <a class="nav-item active" href="#editor"><span>⌁</span> Capture studio</a>
-        <a class="nav-item" href="#recent"><span>◫</span> Recent captures</a>
-        <a class="nav-item" href="#library"><span>⌘</span> Brand library</a>
-      </nav>
-      <div class="sidebar-spacer"></div>
-      <div class="plan-card"><span class="plan-dot"></span><div><strong>Creator workspace</strong><small>12 of 50 captures used</small></div><button aria-label="More plan options">•••</button></div>
-      <div class="profile"><div class="avatar">PG</div><div><strong>Praveen G.</strong><small>Workspace owner</small></div><span>⌄</span></div>
-    </aside>
-
-    <main>
-      <header class="topbar">
-        <div class="crumb"><span>Capture studio</span><i>/</i><strong id="documentName">Untitled capture</strong><button id="renameBtn" aria-label="Rename capture">✎</button></div>
-        <div class="top-actions"><button class="icon-button" id="undoBtn" title="Undo">↶</button><button class="icon-button" id="redoBtn" title="Redo">↷</button><span class="divider"></span><button class="share-button" id="shareBtn"><span>↗</span> Share</button><button class="export-button" id="downloadBtn">Export <span>⌄</span></button></div>
-      </header>
-
-      <section class="workspace">
-        <div class="studio-head"><div><p class="eyebrow">VISUAL COMMUNICATION, ELEVATED</p><h1>Make every detail <em>impossible to miss.</em></h1><p class="subtitle">Capture, mark up, and share beautiful context in seconds.</p></div><div class="autosave"><span></span> All changes saved</div></div>
-
-        <div class="editor-grid">
-          <section class="editor-panel" id="editor">
-            <div class="capture-bar">
-              <button class="capture-main" id="screenCapture"><span class="capture-icon">◎</span> New capture <kbd>⌘ K</kbd></button>
-              <span class="bar-label">or</span>
-              <button class="import-button" id="uploadBtn">Upload image</button><input type="file" id="fileInput" accept="image/*" hidden>
-              <span class="paste-hint">Paste from clipboard <kbd>⌘ V</kbd></span>
-            </div>
-            <div class="canvas-area" id="canvasArea">
-              <div class="canvas-toolbar" aria-label="Annotation tools">
-                <button class="tool active" data-tool="select" title="Select (V)">↖</button><button class="tool" data-tool="highlight" title="Highlight (H)"><span class="highlight-icon">╱</span></button><button class="tool" data-tool="draw" title="Draw (D)">〰</button><button class="tool" data-tool="arrow" title="Arrow (A)">↗</button><button class="tool" data-tool="text" title="Text (T)">T</button><button class="tool" data-tool="crop" title="Crop (C)">⌑</button><span class="tool-sep"></span><button class="tool" id="deleteBtn" title="Delete selected">⌫</button>
-              </div>
-              <div class="canvas-wrap" id="canvasWrap"><canvas id="editorCanvas" width="1280" height="720"></canvas><div class="empty-state" id="emptyState"><div class="empty-icon">⌗</div><h3>Your canvas is ready</h3><p>Capture your screen, upload an image, or paste<br>anything from your clipboard.</p><button id="emptyCapture">Start a capture <span>→</span></button></div></div>
-              <div class="zoom-bar"><button id="zoomOut">−</button><span id="zoomValue">100%</span><button id="zoomIn">+</button><span class="zoom-sep"></span><button id="fitBtn">Fit to screen</button></div>
-            </div>
-          </section>
-
-          <aside class="inspector">
-            <div class="inspector-heading"><h2>Properties</h2><button>•••</button></div>
-            <div class="no-selection" id="noSelection"><div class="sparkle">✦</div><h3>Ready when you are</h3><p>Select a tool to start adding<br>clarity to your capture.</p></div>
-            <div id="properties" hidden>
-              <section class="property-section"><label>COLOR</label><div class="swatches"><button class="swatch lime selected" data-color="#D7FF4A"></button><button class="swatch coral" data-color="#FF8B76"></button><button class="swatch purple" data-color="#A78BFA"></button><button class="swatch blue" data-color="#73B7FF"></button><button class="swatch white" data-color="#FFFFFF"></button><input id="colorPicker" type="color" value="#D7FF4A" title="Custom color"></div></section>
-              <section class="property-section"><label>OPACITY <output id="opacityOutput">45%</output></label><input id="opacityRange" type="range" min="10" max="100" value="45"></section>
-              <section class="property-section"><label>STROKE WEIGHT <output id="weightOutput">6 px</output></label><div class="weight-options"><button data-weight="3">Thin</button><button class="selected" data-weight="6">Medium</button><button data-weight="10">Bold</button></div></section>
-              <section class="property-section crop-actions" id="cropActions" hidden><label>CROP SELECTION</label><button id="applyCrop">Apply crop</button><button id="cancelCrop">Cancel</button></section>
-            </div>
-            <div class="tip-card"><span>✦</span><p><b>Pro tip</b><br>Use <kbd>H</kbd> to switch to the highlighter anytime.</p></div>
-          </aside>
-        </div>
-      </section>
-    </main>
-  </div>
-  <div class="toast" id="toast"></div>
-  <script src="app.js"></script>
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Clario — Capture. Clarify. Share.</title><link rel="icon" href="assets/clario-icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"></head><body>
+<header><a class="brand" href="#"><img class="logo" src="assets/clario-logo.png" alt="Clario" width="180" height="61"><span>Capture. Clarify. Share.</span></a><div class="header-actions"><button id="helpBtn">Quick guide</button><button id="openBtn">Open image / project</button><input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,.clario.json" hidden></div></header>
+<main><section class="capturebar" aria-label="Capture controls"><div class="capturegroup"><select id="captureMode" aria-label="Screenshot mode"><option value="full">Screen / window / tab</option><option value="region">Region (capture, then select)</option></select><button id="captureBtn" class="primary">◎ Capture screenshot</button><select id="delay" aria-label="Capture delay"><option value="0">No delay</option><option value="3">3 sec delay</option><option value="5">5 sec delay</option><option value="10">10 sec delay</option></select></div><div class="recordgroup"><button id="recordBtn">● Record video</button><label><input id="systemAudio" type="checkbox">Screen audio</label><label><input id="micAudio" type="checkbox">Microphone</label></div></section>
+<section id="recordbar" class="recordbar" hidden><span class="record-dot"></span><strong id="recordState">Recording</strong><span id="recordTime">00:00</span><button id="pauseRecord">Pause</button><button id="stopRecord">■ Stop & preview</button><small>5-minute maximum per snippet</small></section>
+<section class="editor"><nav class="tools" aria-label="Annotation tools">
+<button data-tool="select" class="active" title="Select and move (V)">↖<span>Select</span></button><button data-tool="highlight" title="Highlight (H)">▰<span>Highlight</span></button><button data-tool="rect" title="Rectangle (R)">□<span>Rectangle</span></button><button data-tool="ellipse" title="Ellipse (O)">○<span>Ellipse</span></button><button data-tool="arrow" title="Arrow (A)">↗<span>Arrow</span></button><button data-tool="line" title="Line (L)">╱<span>Line</span></button><button data-tool="draw" title="Pen (D)">✎<span>Pen</span></button><button data-tool="text" title="Text (T)">T<span>Text</span></button><button data-tool="step" title="Numbered step (N)">①<span>Step</span></button><button data-tool="redact" title="Opaque redaction">▣<span>Redact</span></button><button data-tool="blur" title="Blur (not secure redaction)">▒<span>Blur</span></button><button data-tool="erase" title="Erase annotations (E)">⌫<span>Eraser</span></button><button data-tool="crop" title="Crop (C)">⌑<span>Crop</span></button></nav>
+<div class="workspace"><div class="editbar"><input id="documentName" aria-label="Document name" value="Untitled capture" maxlength="100"><span id="dimensions">No image yet</span><span class="spacer"></span><button id="undoBtn" title="Undo (Ctrl+Z)">↶ Undo</button><button id="redoBtn" title="Redo (Ctrl+Y)">↷ Redo</button></div><div id="stage"><div id="canvasWrap"><canvas id="editorCanvas" width="960" height="600" aria-label="Screenshot annotation canvas" tabindex="0"></canvas></div><div id="emptyState"><div class="hero-mark">◎</div><h1>A little capture.<br>A lot more clarity.</h1><p>Capture your screen, drop in an image, or paste with Ctrl+V.<br>Highlight what matters. Save it in seconds.</p><button id="demoBtn" class="primary">Try a sample capture</button><small>Local editing · No account · No image uploads</small></div></div><div class="statusbar"><span id="status" role="status">Ready when you are</span><span class="spacer"></span><button id="zoomOut" aria-label="Zoom out">−</button><span id="zoomValue">Fit</span><button id="zoomIn" aria-label="Zoom in">+</button><button id="fitBtn">Fit</button><button id="actualBtn">100%</button></div></div>
+<aside><h2>Make it clear</h2><label>Color<input id="colorPicker" type="color" value="#d7ff4a"></label><div class="swatches"><button data-color="#d7ff4a" style="--swatch:#d7ff4a" aria-label="Lime"></button><button data-color="#ff705b" style="--swatch:#ff705b" aria-label="Coral"></button><button data-color="#8b6ff5" style="--swatch:#8b6ff5" aria-label="Purple"></button><button data-color="#209ad6" style="--swatch:#209ad6" aria-label="Blue"></button><button data-color="#ffffff" style="--swatch:#ffffff" aria-label="White"></button><button data-color="#17251d" style="--swatch:#17251d" aria-label="Ink"></button></div><label>Stroke <output id="weightValue">4 px</output><input id="weight" type="range" min="1" max="24" value="4"></label><label>Opacity <output id="opacityValue">40%</output><input id="opacity" type="range" min="10" max="100" value="40"></label><label>Shape style<select id="fillStyle"><option value="border">Border only</option><option value="filled">Filled with border</option></select></label><label>Text size<select id="fontSize"><option>16</option><option selected>24</option><option>32</option><option>48</option><option>64</option></select></label><div class="selection-actions"><button id="unselectBtn">Unselect (Esc)</button><button id="deleteBtn">Delete selected</button><button id="duplicateBtn">Duplicate</button><button id="frontBtn">Bring to front</button><button id="editTextBtn">Edit selected text</button></div><div id="cropActions" hidden><button id="applyCrop" class="primary">Apply crop</button><button id="cancelCrop">Cancel crop</button></div><details><summary>Image adjustments</summary><button id="rotateBtn">Rotate 90°</button><button id="resizeBtn">Resize image</button><button id="borderBtn">Add image border</button></details><p class="tip" id="toolTip">Click a mark to select it. Drag to move. Drag its lower-right handle to resize. Press Esc to unselect.</p></aside></section>
+<section class="exportbar"><p>Clear context, ready to go.<small id="saveStatus">Save a project to keep editable annotations.</small></p><select id="exportFormat" aria-label="Export format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select><button id="copyBtn">Copy image</button><button id="projectBtn">Save editable project</button><button id="downloadBtn" class="primary">↓ Export image</button></section>
+<section id="videoPanel" class="video-panel" hidden><div><h2>Your video snippet</h2><p id="videoInfo"></p><video id="recordPreview" controls playsinline></video></div><div><button id="saveVideo" class="primary">↓ Save recording</button><button id="videoFrame">Capture current frame</button><button id="closeVideo">Close preview</button><p>Downloads use your browser’s recording format. Use More tools to trim and convert in the desktop edition.</p></div></section>
+<section class="drafts"><h2>Recent local projects</h2><p>Stored on this device only. Export files for a reliable backup.</p><div id="recentList"></div><button id="clearDrafts">Clear local projects</button></section>
+</main><dialog id="textDialog"><form method="dialog"><h2 id="textTitle">Add text</h2><textarea id="textInput" maxlength="2000" rows="4" placeholder="Write a short note…" aria-label="Annotation text"></textarea><div><button value="cancel">Cancel</button><button value="save" class="primary">Save text</button></div></form></dialog><dialog id="helpDialog"><h2>Three steps. That’s it.</h2><ol><li><strong>Capture</strong> a screen, window, or tab using the browser chooser. For a region, capture first and drag a crop. Or use Win+Shift+S and paste.</li><li><strong>Clarify</strong> with highlights, borders, arrows, text, and numbered steps. Select marks to move or resize; use Eraser to remove annotations.</li><li><strong>Save</strong> a PNG or an editable Clario project. For video, press Record, choose a source, then Stop & preview.</li></ol><p>Ctrl+Z undo · Ctrl+Y redo · Delete removes selection · Esc unselects · V select · H highlight · R rectangle · O ellipse · A arrow · D pen · T text · C crop</p><p>Blur is a visual effect. Use opaque Redact and export a flattened image to hide sensitive information. Editable projects retain the original image.</p><p>Screen capture and recording require a supported desktop browser and permission. Global hotkeys, scrolling capture, OCR, cloud links, and native installers are not included in this browser edition.</p><button id="closeHelp" class="primary">Got it</button></dialog><div id="toast" role="status" aria-live="polite"></div>
+<script src="editor-core.js"></script><script src="media.js"></script><script src="app.js"></script><script src="advanced-core.js"></script><script src="advanced.js"></script></body></html>
