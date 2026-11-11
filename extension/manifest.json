@@ -1,0 +1,1 @@
+{"manifest_version":3,"name":"Clario Full Page Capture","version":"0.3.0","description":"Capture the full current web page as a PNG for editing in Clario.","permissions":["activeTab","debugger","downloads"],"action":{"default_popup":"popup.html","default_title":"Capture full page with Clario"}}

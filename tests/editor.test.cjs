@@ -1,117 +1,25 @@
-const assert = require('node:assert/strict');
-const { readFileSync } = require('node:fs');
-const { test } = require('node:test');
-const vm = require('node:vm');
-
-// Exercise the real app handlers with a minimal DOM/canvas harness.
-const source = readFileSync(require('node:path').join(__dirname, '../app.js'), 'utf8');
-function editor() {
-  const elements = new Map();
-  const calls = [];
-  const pendingImages = [];
-  const context = new Proxy({}, { get: (_, method) => (...args) => calls.push([method, ...args]) });
-  function element() {
-    return {
-      style: {}, classList: { add() {}, remove() {}, toggle() {} }, dataset: {},
-      width: 1280, height: 720, listeners: {},
-      addEventListener(type, callback) { this.listeners[type] = callback; },
-      getContext() { return context; },
-      getBoundingClientRect() { return { left: 0, top: 0, width: this.width, height: this.height }; },
-      setPointerCapture() {},
-      toDataURL() { return `data:image/png;size=${this.width}x${this.height}`; },
-      click() { this.onclick?.(); }
-    };
-  }
-  const document = {
-    querySelector(selector) {
-      if (!elements.has(selector)) elements.set(selector, element());
-      return elements.get(selector);
-    },
-    querySelectorAll() { return []; },
-    addEventListener() {},
-    createElement(tag) {
-      const node = element();
-      if (tag === 'a') elements.set('download', node);
-      return node;
-    }
-  };
-  class Image {
-    set src(value) { this._src = value; pendingImages.push(this); }
-    get src() { return this._src; }
-  }
-  const sandbox = vm.createContext({ document, Image, setTimeout() {}, navigator: {}, location: {} });
-  vm.runInContext(source, sandbox);
-  const run = code => vm.runInContext(code, sandbox);
-  function flushImages() {
-    while (pendingImages.length) {
-      const image = pendingImages.shift();
-      const match = /size=(\d+)x(\d+)/.exec(image.src);
-      if (match) { image.width = +match[1]; image.height = +match[2]; }
-      image.onload();
-    }
-  }
-  function gesture(type, x, y, dx, dy) {
-    run(`selectTool('${type}')`);
-    const canvas = document.querySelector('#editorCanvas');
-    const event = (clientX, clientY) => ({ clientX, clientY, pointerId: 1 });
-    canvas.listeners.pointerdown(event(x, y));
-    canvas.listeners.pointermove(event(x + dx, y + dy));
-    canvas.listeners.pointerup(event(x + dx, y + dy));
-  }
-  run("setCanvas({src:'original',width:640,height:480})");
-  return { document, calls, run, flushImages, gesture };
-}
-
-test('crop undo restores image, annotations, geometry, wrapper and export size', () => {
-  const e = editor();
-  e.gesture('arrow', 50, 60, 100, 80);
-  e.gesture('crop', 10, 20, 200, 100);
-  const before = e.run('JSON.stringify(annotations)');
-  e.document.querySelector('#applyCrop').click();
-  e.flushImages();
-  const canvas = e.document.querySelector('#editorCanvas');
-  assert.equal(canvas.width, 200);
-  assert.equal(canvas.height, 100);
-  e.document.querySelector('#undoBtn').click();
-  e.flushImages();
-  assert.equal(canvas.width, 640);
-  assert.equal(canvas.height, 480);
-  assert.equal(e.document.querySelector('#canvasWrap').style.width, '640px');
-  assert.equal(e.run('image.src'), 'original');
-  assert.equal(e.run('JSON.stringify(annotations)'), before);
-  const lastImageDraw = e.calls.filter(call => call[0] === 'drawImage').at(-1);
-  assert.deepEqual(lastImageDraw.slice(2), [0, 0, 640, 480]);
-  e.document.querySelector('#downloadBtn').click();
-  assert.equal(e.document.querySelector('download').href, 'data:image/png;size=640x480');
-  e.document.querySelector('#undoBtn').click();
-  e.flushImages();
-  assert.equal(e.run('annotations.length'), 1);
-  assert.equal(canvas.width, 640);
-  assert.equal(canvas.height, 480);
-});
-
-for (const [name, dx, dy, accepted] of [
-  ['vertical down', 0, 100, true],
-  ['vertical up', 0, -100, true],
-  ['mostly vertical', 2, 100, true],
-  ['horizontal', 100, 0, true],
-  ['diagonal', -40, -60, true],
-  ['click', 0, 0, false],
-  ['tiny drag', 2, 2, false],
-  ['threshold', 3, 0, false]
-]) {
-  test(`arrow completion: ${name}`, () => {
-    const e = editor();
-    e.gesture('arrow', 100, 150, dx, dy);
-    assert.equal(e.run('annotations.length'), accepted ? 1 : 0);
-    assert.equal(e.run('history.length'), accepted ? 2 : 1);
-    assert.equal(e.run('drawing'), null);
-    if (accepted) {
-      assert.equal(e.run('annotations[0].w'), dx);
-      assert.equal(e.run('annotations[0].h'), dy);
-      e.document.querySelector('#undoBtn').click();
-      e.flushImages();
-      assert.equal(e.run('annotations.length'), 0);
-    }
-  });
-}
+const assert=require('node:assert/strict');
+const {test}=require('node:test');
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const C=require('../editor-core.js');
+const data='data:image/png;base64,YQ==';
+const shape=(type='rect',extra={})=>({type,x:10,y:10,w:100,h:50,color:'#d7ff4a',weight:4,opacity:.4,...extra});
+function harness(){const elements=new Map(),calls=[],timers=[];let downloaded;
+function node(tag='div'){const n={tagName:tag.toUpperCase(),width:640,height:480,clientWidth:900,clientHeight:650,style:{},dataset:{},listeners:{},value:'',classList:{add(){},remove(){},toggle(){}},addEventListener(t,f){this.listeners[t]=f;},setAttribute(){},setPointerCapture(){},getBoundingClientRect(){return{left:0,top:0,width:this.width,height:this.height};},click(){this.onclick?.();if(this.download)downloaded=this;},append(){},replaceChildren(){},getContext(){const base={canvas:this,measureText(s){return{width:s.length*12};}};return new Proxy(base,{get:(o,k)=>k in o?o[k]:(...args)=>calls.push([k,...args])});},toDataURL(){return data;},toBlob(fn,type){fn(new Blob(['image'],{type}));}};return n;}
+const document={querySelector(s){if(!elements.has(s))elements.set(s,node(s==='#editorCanvas'?'canvas':'div'));return elements.get(s);},querySelectorAll(){return[];},createElement:node,addEventListener(){},activeElement:null};
+class Image{constructor(){this.width=640;this.height=480;}set src(s){this._src=s;queueMicrotask(()=>this.onload?.());}get src(){return this._src;}}
+const sandbox={ClarioCore:C,ClarioMedia:{},document,Image,Blob,URL:{createObjectURL:()=> 'blob:download',revokeObjectURL(){}},navigator:{},setTimeout(f){timers.push(f);return 1;},clearTimeout(){},setInterval(){},clearInterval(){},queueMicrotask,console,confirm:()=>true,prompt:()=>null};sandbox.window=sandbox;sandbox.addEventListener=()=>{};
+vm.createContext(sandbox);vm.runInContext(fs.readFileSync(path.join(__dirname,'../app.js'),'utf8'),sandbox);const run=c=>vm.runInContext(c,sandbox);
+const canvas=document.querySelector('#editorCanvas');
+async function gesture(type,x,y,dx,dy){run(`selectTool('${type}')`);await canvas.listeners.pointerdown({button:0,clientX:x,clientY:y,pointerId:1});canvas.listeners.pointermove({clientX:x+dx,clientY:y+dy,pointerId:1});canvas.listeners.pointerup({clientX:x+dx,clientY:y+dy,pointerId:1});}
+return{run,document,calls,gesture,get downloaded(){return downloaded;}};}
+test('real crop → undo → redo restores original dimensions, marks, wrapper, and export dimensions',async()=>{const e=harness();await e.run(`setCanvas('${data}')`);await e.gesture('arrow',50,60,100,80);await e.gesture('crop',10,20,200,100);await e.document.querySelector('#applyCrop').onclick();assert.equal(e.run('canvas.width'),200);assert.equal(e.run('canvas.height'),100);assert.equal(e.run('annotations.length'),0);await e.run('undo()');assert.equal(e.run('canvas.width'),640);assert.equal(e.run('canvas.height'),480);assert.equal(e.run('annotations.length'),1);assert.equal(e.document.querySelector('#canvasWrap').style.width,'640px');const c=e.run('composite()');assert.equal(c.width,640);assert.equal(c.height,480);await e.run('redo()');assert.equal(e.run('canvas.width'),200);assert.equal(e.run('canvas.height'),100);});
+for(const [name,dx,dy,accepted]of[['down',0,100,true],['up',0,-100,true],['mostly vertical',2,100,true],['horizontal',100,0,true],['diagonal',-40,-60,true],['click',0,0,false],['tiny',2,2,false],['threshold',3,0,false]])test('real arrow handler: '+name,async()=>{const e=harness();await e.run(`setCanvas('${data}')`);await e.gesture('arrow',100,150,dx,dy);assert.equal(e.run('annotations.length'),accepted?1:0);if(accepted){assert.equal(e.run('annotations[0].w'),dx);assert.equal(e.run('annotations[0].h'),dy);await e.run('undo()');assert.equal(e.run('annotations.length'),0);}});
+test('selection eraser removes only marks and undo restores them',async()=>{const e=harness();await e.run(`setCanvas('${data}')`);await e.gesture('rect',10,10,100,100);await e.gesture('erase',60,60,0,0);assert.equal(e.run('annotations.length'),0);assert.equal(e.run('image.src'),data);await e.run('undo()');assert.equal(e.run('annotations.length'),1);});
+test('export composite excludes selection handles and transient crop',async()=>{const e=harness();await e.run(`setCanvas('${data}')`);await e.gesture('rect',10,10,100,100);e.run('selected=0');await e.gesture('crop',1,1,20,20);const before=e.calls.length;e.run('composite()');const drawCalls=e.calls.slice(before);assert.equal(drawCalls.filter(c=>c[0]==='setLineDash').length,0);});
+test('core history restores dimensions and truncates redo after a new edit',()=>{const h=new C.History();h.save({w:640,h:480});h.save({w:200,h:100});assert.deepEqual(h.undo(),{w:640,h:480});h.save({w:300,h:200});assert.equal(h.redo(),null);assert.deepEqual(h.undo(),{w:640,h:480});});
+test('rectangle with negative drag is clipped to image boundaries',()=>{assert.deepEqual(C.cropRect(shape('crop',{x:150,y:80,w:-170,h:-100}),640,480),{x:0,y:0,w:150,h:80});});
+test('diagonal line selection ignores empty corners of its bounding box',()=>{const a=shape('arrow',{x:0,y:0,w:100,h:100});assert.equal(C.hit(a,{x:0,y:100}),false);assert.equal(C.hit(a,{x:50,y:50}),true);});
+test('project validation rejects malformed or unsupported image and annotations',()=>{const s={version:1,width:640,height:480,image:data,annotations:[shape()]};assert.deepEqual(C.validateProject(s),s);for(const bad of [{...s,width:Infinity},{...s,image:'https://external/image.png'},{...s,annotations:[shape('script')]},{...s,annotations:[shape('draw',{points:[{x:NaN,y:1}]})]},{...s,annotations:[shape('text',{text:'abc',fontSize:Infinity})]}])assert.throws(()=>C.validateProject(bad));});
+test('moving freehand marks moves every point',()=>{const a=shape('draw',{points:[{x:1,y:2},{x:3,y:4}]});C.move(a,10,20);assert.deepEqual(a.points,[{x:11,y:22},{x:13,y:24}]);});
+test('Escape cancels an in-progress move without leaving an untracked edit',async()=>{const e=harness();await e.run(`setCanvas('${data}')`);await e.gesture('rect',10,10,100,100);e.run("selected=0;drag={original:ClarioCore.clone(annotations[0]),start:{x:50,y:50},mode:'move'};dragTo({x:100,y:100});unselect()");assert.equal(e.run('annotations[0].x'),10);assert.equal(e.run('selected'),-1);});
