@@ -32,3 +32,13 @@ test('video import after recording and oversized input recovery',()=>{
  const h=harness(),input=h.run('videoImport');input.files=[{size:101*1024*1024}];input.value='large.mp4';input.onchange();assert.equal(h.imports.length,0);assert.equal(input.value,'');
  const clip={size:200,type:'video/mp4'};input.files=[clip];input.value='clip.mp4';input.onchange();assert.deepEqual(h.imports,[clip]);assert.equal(input.value,'');
 });
+test('configured Free desktop blocks batch conversion and licensed Pro can open it',async()=>{
+ const h=harness();const input=h.run('batchInput');
+ h.context.ClarioDesktop.licenseStatus=async()=>({configured:true,active:false});
+ await h.get('batchBtn').onclick();
+ assert.equal(input.clicked,undefined);
+ assert.match(h.messages.at(-1),/Clario Pro is required/);
+ h.context.ClarioDesktop.licenseStatus=async()=>({configured:true,active:true});
+ await h.get('batchBtn').onclick();
+ assert.equal(input.clicked,true);
+});
